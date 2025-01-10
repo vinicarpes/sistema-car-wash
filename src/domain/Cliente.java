@@ -1,8 +1,4 @@
-package domain.cliente;
-
-import domain.IDados;
-import domain.Pontuacao;
-import domain.Veiculo;
+package domain;
 
 import java.time.LocalDate;
 import java.util.List;

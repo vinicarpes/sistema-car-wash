@@ -9,40 +9,41 @@ public class Veiculo {
 	private int id;
 	private String placa;
 	private Modelo modelo;
-        private String observacoes;
-        private Cor cor;
-	
+	private String observacoes;
+	private Cor cor;
+	private Cliente cliente;
+
 	public Veiculo(int id, String placa, Modelo modelo, String observacoes, Cor cor) {
 		this.id = id;
 		this.placa = placa;
 		this.modelo = modelo;
-                this. observacoes = observacoes;
-                this.cor = cor;
+		this. observacoes = observacoes;
+		this.cor = cor;
 	}
-        public Veiculo(int id, String placa, Modelo modelo) {
+	public Veiculo(int id, String placa, Modelo modelo) {
 		this.id = id;
 		this.placa = placa;
 		this.modelo = modelo;
-        }
-        
-        public Veiculo(String placa, Modelo modelo){
-            this.modelo = modelo;
-            this.placa = placa;
-        }
-        
-        public Veiculo(String placa){
-            this.placa = placa;
-        }
-        
-        public Veiculo(){}
-	
-        public String getObservacoes() {
-            return observacoes;
-                }
+	}
 
-        public void setObservacoes(String observacoes) {
-            this.observacoes = observacoes;
-        }
+	public Veiculo(String placa, Modelo modelo){
+		this.modelo = modelo;
+		this.placa = placa;
+	}
+
+	public Veiculo(String placa){
+		this.placa = placa;
+	}
+
+	public Veiculo(){}
+
+	public String getObservacoes() {
+		return observacoes;
+	}
+
+	public void setObservacoes(String observacoes) {
+		this.observacoes = observacoes;
+	}
 	public int getId() {
 		return id;
 	}
@@ -68,6 +69,6 @@ public class Veiculo {
 		return "\nIdentificador do veículo - " + id + "\nPlaca do veículo - " + placa + "\n" + modelo + cor;
 
 	}
-	
-	
+
+
 }
