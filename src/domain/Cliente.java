@@ -1,6 +1,11 @@
-package domain;
+package domain.cliente;
+
+import domain.IDados;
+import domain.Pontuacao;
+import domain.Veiculo;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public abstract class Cliente implements IDados {
     protected int id;
@@ -9,6 +14,7 @@ public abstract class Cliente implements IDados {
     protected String email;
     protected LocalDate dataCadastro;
     protected Pontuacao pontuacao = new Pontuacao();
+    protected List<Veiculo> veiculos;
 
     public Cliente(int id, String nome, String celular, String email, LocalDate dataCadastro) {
         this.id = id;
