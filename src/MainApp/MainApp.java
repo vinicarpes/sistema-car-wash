@@ -8,6 +8,7 @@ import domain.*;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 /**
@@ -22,11 +23,11 @@ public class MainApp {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         Scanner scanner = new Scanner(System.in);
 
-//        Cliente pessoaFisica = criarPessoaFisica(scanner, formatter);
-//        System.out.println(pessoaFisica.getDados("Cliente no Serasa"));
+        Cliente pessoaFisica = criarPessoaFisica(scanner, formatter);
+        System.out.println(pessoaFisica.getDados("Cliente no Serasa"));
 
-        Cliente pessoaJuridica = criarPessoaJuridica(scanner, formatter);
-        System.out.println(pessoaJuridica.getDados());
+//        Cliente pessoaJuridica = criarPessoaJuridica(scanner, formatter);
+//        System.out.println(pessoaJuridica.getDados());
 
         scanner.close();
     }
@@ -77,7 +78,7 @@ public class MainApp {
             try {
                 System.out.println(mensagem);
                 data = LocalDate.parse(scanner.nextLine(), formatter);
-            } catch (DateTimeException e) {
+            } catch (DateTimeParseException e) {
                 System.out.println("Formato inválido. Tente novamente.");
             }
         }
