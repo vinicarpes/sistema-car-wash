@@ -23,8 +23,11 @@ public class MainApp {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         Scanner scanner = new Scanner(System.in);
 
+        Veiculo veiculo = new Veiculo("4654fwsf");
         Cliente pessoaFisica = criarPessoaFisica(scanner, formatter);
-        System.out.println(pessoaFisica.getDados("Cliente no Serasa"));
+//        System.out.println(pessoaFisica.getDados("Cliente no Serasa"));
+        pessoaFisica.add(veiculo);
+        pessoaFisica.imprimirVeiculos();
 
 //        Cliente pessoaJuridica = criarPessoaJuridica(scanner, formatter);
 //        System.out.println(pessoaJuridica.getDados());
