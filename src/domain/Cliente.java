@@ -1,16 +1,17 @@
 package domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Cliente implements IDados {
+public abstract class Cliente implements ICliente {
     protected int id;
     protected String nome;
     protected String celular;
     protected String email;
     protected LocalDate dataCadastro;
     protected Pontuacao pontuacao = new Pontuacao();
-    protected List<Veiculo> veiculos;
+    protected List<Veiculo> veiculos = new ArrayList<>();
 
     public Cliente(int id, String nome, String celular, String email, LocalDate dataCadastro) {
         this.id = id;
@@ -31,6 +32,12 @@ public abstract class Cliente implements IDados {
         return "Nome: " + this.nome + "\nCelular: " + this.celular + "\nEmail: " + this.email + "\nData de Cadastro: " + this.dataCadastro + "\n" + "Pontuacao: " + this.pontuacao.getQuantidade() + "\nObservação: " + observacao;
     }
 
-    public void add(Veiculo veiculo) {}
-    public void remove(Veiculo veiculo) {}
+    public void add(Veiculo veiculo) {
+        this.veiculos.add(veiculo); //lista de veiculos do cliente
+        veiculo.setCliente(this);//amarração para garantir que o veiculo esteja na lista de veiculos do cliente dessa instância (this)
+    }
+    public void remove(Veiculo veiculo) {
+        this.veiculos.remove(veiculo);
+        veiculo.setCliente(null);
+    }
 }
