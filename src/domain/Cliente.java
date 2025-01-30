@@ -23,7 +23,12 @@ public abstract class Cliente implements ICliente {
 
     @Override
     public String getDados() {
-        return "Nome: " + this.nome + "\nCelular: " + this.celular + "\nEmail: " + this.email + "\nData de Cadastro: " + this.dataCadastro + "\n" + "Pontuacao: " + this.pontuacao.getQuantidade();
+        return "Nome: " + this.nome +
+                "\nCelular: " + this.celular +
+                "\nEmail: " + this.email +
+                "\nData de Cadastro: " + this.dataCadastro +
+                "\n" + "Pontuacao: " + this.pontuacao.getQuantidade() +
+                "\nLISTA DE VEÍCULOS" + "\n";
     }
 
     //overloading
@@ -39,5 +44,11 @@ public abstract class Cliente implements ICliente {
     public void remove(Veiculo veiculo) {
         this.veiculos.remove(veiculo);
         veiculo.setCliente(null);
+    }
+
+    public void imprimirVeiculos(){
+        for (Veiculo veiculo : this.veiculos) {
+            System.out.println(veiculo);
+        }
     }
 }
