@@ -14,6 +14,8 @@ public class Modelo {
 
 	private Motor motor = new Motor();
 
+	private ECategoria eCategoria;
+
 
 	public Modelo(int id, String descricao, Marca marca) {
 		this.id = id;
