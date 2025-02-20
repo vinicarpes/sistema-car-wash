@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Cliente implements ICliente {
+public abstract class Cliente implements IDados {
     protected int id;
     protected String nome;
     protected String celular;
