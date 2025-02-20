@@ -1,8 +1,18 @@
 #Sistema de lavação Car Wash
 
-Esse projeto é referente ao eixo norteador do curso técnico em desenvolvimento de sistemas do IFSC - Florianópolis
+O sistema de lavação Car Wash foi proposto como eixo norteador das atividades do curso técnico em desenvolvimento de sistemas. 
 
 #Objetivo
+
+O sistema possuí o objetivo de automatizar os processos de cadastro, pagamento e realização de relatórios.
+
+Dessa forma, podemos elencar suas funcionalidades da seguinte maneira:
+
+- Manter cliente
+- Manter veículo
+- Manter serviço
+- Manter ordem de serviço
+- Gerar relatório
 
 #Domínio
 
