@@ -35,7 +35,7 @@ public class Marca {
 	@Override
 	public String toString() {
 
-		return "\n\nIdentificador da marca - " + id + "\nMarca do veículo - " + nome;
+		return "\nIdentificador da marca - " + id + "\nMarca do veículo - " + nome;
 
 	}
 }

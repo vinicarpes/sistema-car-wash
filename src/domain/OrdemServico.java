@@ -8,9 +8,15 @@ public class OrdemServico {
     private long numero;
     private double total;
     private LocalDate agenda;
-    private double desconto;
+    private double desconto = 0.0;
     private List<ItemOS> itensOS = new ArrayList<>();
     private Veiculo veiculo;
+
+    public OrdemServico(long numero, double total, LocalDate agenda){
+        this.numero = numero;
+        this.total = total;
+        this.agenda = agenda;
+    }
 
     public long getNumero() {
         return numero;
