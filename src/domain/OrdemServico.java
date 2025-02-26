@@ -1,6 +1,5 @@
 package domain;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +10,7 @@ public class OrdemServico {
     private LocalDate agenda;
     private double desconto;
     private List<ItemOS> itensOS = new ArrayList<>();
+    private Veiculo veiculo;
 
     public long getNumero() {
         return numero;
@@ -21,7 +21,7 @@ public class OrdemServico {
     }
 
     public double getTotal() {
-        return total;
+        return calcularServico();
     }
 
     public void setTotal(double total) {
@@ -44,7 +44,7 @@ public class OrdemServico {
         this.desconto = desconto;
     }
 
-    public double calcularServio(){
+    public double calcularServico(){
         total =0;
         for(ItemOS itemOS: itensOS){
             total += itemOS.getValorServico();
@@ -56,10 +56,24 @@ public class OrdemServico {
 
     public void add(ItemOS itemOS){
         itensOS.add(itemOS);
+        itemOS.setOrdemServico(this);
     }
 
     public void remove(ItemOS itemOS){
         itensOS.remove(itemOS);
+        itemOS.setOrdemServico(null);
+    }
+
+    public Veiculo getVeiculo() {
+        return veiculo;
+    }
+
+    public void setVeiculo(Veiculo veiculo) {
+        this.veiculo = veiculo;
+    }
+
+    public List<ItemOS> getItensOS() {
+        return itensOS;
     }
 
 }
