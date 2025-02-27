@@ -6,7 +6,7 @@ public class Relatorio {
 
         sb.append("**********DADOS DO CLIENTE**********");
         sb.append("\n").append(cliente.getDados());
-        sb.append("********LISTA DE VEICULOS***********");
+        sb.append("\n\n********LISTA DE VEICULOS***********");
         sb.append(cliente.listarVeiculos());
         sb.append("\n************************************");
 

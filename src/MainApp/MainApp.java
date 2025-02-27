@@ -25,12 +25,18 @@ public class MainApp {
         Scanner scanner = new Scanner(System.in);
 
         Cor cor1 = new Cor("Vermelho");
-        Marca marca1 = new Marca("VW");
+        Marca marca1 = new Marca("Volkswagen");
         Modelo modelo1 = new Modelo("Gol 1.0", marca1);
-        Veiculo veiculo = new Veiculo(1,"4654fwsf",modelo1, "OBS", cor1);
+        Veiculo veiculo = new Veiculo(1,"MJB9972",modelo1, "OBS", cor1);
         Cliente pessoaFisica = new PessoaFisica(1, "Vinicius", "48984830045", "vinicius@gmail.com", today, "12345678977", today);
 
+        Cor cor2 = new Cor("Midnight purple");
+        Marca marca2 = new Marca("Chevrolet");
+        Modelo modelo2 = new Modelo("Cobalt 1.8 LTZ", marca2);
+        Veiculo veiculo2 = new Veiculo(2, "MIC6699", modelo2, "Banco traseiro com perfurações", cor2) ;
+
         pessoaFisica.add(veiculo);
+        pessoaFisica.add(veiculo2);
 //        pessoaFisica.imprimirVeiculos();
 
         Servico limpezaLuxo = new Servico(1, "Limpeza de luxo completa", 500, ECategoria.GRANDE);
