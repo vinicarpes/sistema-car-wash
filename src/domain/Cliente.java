@@ -21,6 +21,14 @@ public abstract class Cliente implements IDados {
         this.dataCadastro = dataCadastro;
     }
 
+    public Pontuacao getPontuacao() {
+        return pontuacao;
+    }
+
+    public void setPontuacao(Pontuacao pontuacao) {
+        this.pontuacao = pontuacao;
+    }
+
     @Override
     public String getDados() {
         return "Nome: " + this.nome +

@@ -42,6 +42,8 @@ public class MainApp {
         Servico limpezaLuxo = new Servico(1, "Limpeza de luxo completa", 500, ECategoria.GRANDE);
         Servico limpezaBasica = new Servico(2, "Limpeza básica", 500, ECategoria.PEQUENO);
 
+        Servico.setPontos(10);
+
         OrdemServico os1 = new OrdemServico(15462, 500, today);
         os1.setDesconto(100);
         os1.setVeiculo(veiculo);

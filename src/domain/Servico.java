@@ -51,7 +51,7 @@ public class Servico {
         Servico.pontos = pontos;
     }
 
-    public static int getPontos() {
+    public int getPontos() {
         return pontos;
     }
 }
