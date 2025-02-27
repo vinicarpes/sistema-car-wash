@@ -27,8 +27,7 @@ public abstract class Cliente implements IDados {
                 "\nCelular: " + this.celular +
                 "\nEmail: " + this.email +
                 "\nData de Cadastro: " + this.dataCadastro +
-                "\n" + "Pontuacao: " + this.pontuacao.getQuantidade() +
-                "\nLISTA DE VEÍCULOS" + "\n";
+                "\n" + "Pontuacao: " + this.pontuacao.getQuantidade();
     }
 
     //overloading
@@ -46,9 +45,12 @@ public abstract class Cliente implements IDados {
         veiculo.setCliente(null);
     }
 
-    public void imprimirVeiculos(){
+    public String listarVeiculos(){
+        StringBuilder sb = new StringBuilder();
         for (Veiculo veiculo : this.veiculos) {
-            System.out.println(veiculo);
+            sb.append("\n").append(veiculo.toString());
         }
+
+        return sb.toString();
     }
 }

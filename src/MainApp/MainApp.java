@@ -56,6 +56,9 @@ public class MainApp {
 
         System.out.println(ImpressaoOS.imprimirOS(os1));
 
+        System.out.println("###################################################");
+        System.out.println(Relatorio.imprimir(pessoaFisica));
+
 
         scanner.close();
     }
