@@ -65,7 +65,7 @@ public class OrdemServico {
         itemOS.setOrdemServico(this);
     }
 
-    public void atualizarPontuacao(){
+    public void atualizarPontuacaoCliente(){
         for (ItemOS itemOS: itensOS){
         veiculo.getCliente().getPontuacao().adicionar(itemOS.getServico().getPontos());
         }

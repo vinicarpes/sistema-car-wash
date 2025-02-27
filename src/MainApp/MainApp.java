@@ -61,6 +61,7 @@ public class MainApp {
         os1.add(item1);
         os1.add(item2);
         os1.setDesconto(19);
+        os1.atualizarPontuacaoCliente();
 
         System.out.println(ImpressaoOS.imprimirOS(os1));
 
