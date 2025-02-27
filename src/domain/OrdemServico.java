@@ -27,7 +27,7 @@ public class OrdemServico {
     }
 
     public double getTotal() {
-        return calcularServico();
+        return total;
     }
 
     public void setTotal(double total) {

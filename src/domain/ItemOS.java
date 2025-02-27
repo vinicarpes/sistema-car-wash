@@ -39,4 +39,9 @@ public class ItemOS {
     public void setObservacoes(String observacoes) {
         this.observacoes = observacoes;
     }
+
+    @Override
+    public String toString() {
+        return "\nServiço: " + servico.getDescricao() + "\nValor: " + valorServico + "\nObservacoes: " + observacoes;
+    }
 }
