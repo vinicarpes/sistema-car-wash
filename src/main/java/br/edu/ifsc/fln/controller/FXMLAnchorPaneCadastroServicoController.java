@@ -72,7 +72,7 @@ public class FXMLAnchorPaneCadastroServicoController implements Initializable {
     public void selecionarItemTableViewServico(Servico servico) {
         if (servico != null) {
             lbServicoId.setText(String.valueOf(servico.getId()));
-            lbServicoNome.setText(servico.getNome());
+            lbServicoNome.setText(servico.getDescricao());
         } else {
             lbServicoId.setText("");
             lbServicoNome.setText("");

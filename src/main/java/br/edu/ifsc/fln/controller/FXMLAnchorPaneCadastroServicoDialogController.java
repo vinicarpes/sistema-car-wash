@@ -55,14 +55,14 @@ public class FXMLAnchorPaneCadastroServicoDialogController implements Initializa
 
     public void setServico(Servico servico) {
         this.servico = servico;
-        this.tfServico.setText(servico.getNome());
+        this.tfServico.setText(servico.getDescricao());
     }
 
 
     @FXML
     public void handleBtConfirmar() {
         if (validarEntradaDeDados()) {
-            servico.setNome(tfServico.getText());
+            servico.setDescricao(tfServico.getText());
 
             btConfirmarClicked = true;
             dialogStage.close();
