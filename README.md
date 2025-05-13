@@ -1,6 +1,8 @@
 # Sistema de lavação Car Wash
 
-O sistema de lavação Car Wash foi proposto como eixo norteador das atividades do curso técnico em desenvolvimento de sistemas. 
+O sistema de lavação Car Wash foi proposto como eixo norteador das atividades do curso técnico em desenvolvimento de sistemas.
+
+A aplicação foi desenvolvida com JavaFX para funcionar como um sistema de gerenciamento desktop para uma empresa de lavação.
 
 # Objetivo
 
