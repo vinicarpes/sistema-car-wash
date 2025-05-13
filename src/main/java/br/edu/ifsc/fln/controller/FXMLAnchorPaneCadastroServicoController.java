@@ -39,7 +39,13 @@ public class FXMLAnchorPaneCadastroServicoController implements Initializable {
     private Label lbServicoId;
 
     @FXML
-    private TableColumn<Servico, String> tableColumnServicoNome;
+    private Label lbServicoCategoria;
+
+    @FXML
+    private Label lbServicoValor;
+
+    @FXML
+    private TableColumn<Servico, String> tableColumnServicos;
 
     @FXML
     private TableView<Servico> tableViewServico;
@@ -61,7 +67,7 @@ public class FXMLAnchorPaneCadastroServicoController implements Initializable {
     }
 
     public void carregarTableViewServico() {
-        tableColumnServicoNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        tableColumnServicos.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
         listaServico = servicoDAO.listar();
 
@@ -73,9 +79,13 @@ public class FXMLAnchorPaneCadastroServicoController implements Initializable {
         if (servico != null) {
             lbServicoId.setText(String.valueOf(servico.getId()));
             lbServicoNome.setText(servico.getDescricao());
+            lbServicoCategoria.setText(servico.getCategoria().name());
+            lbServicoValor.setText(String.valueOf(servico.getValor()));
         } else {
             lbServicoId.setText("");
             lbServicoNome.setText("");
+            lbServicoCategoria.setText("");
+            lbServicoValor.setText("");
         }
 
     }

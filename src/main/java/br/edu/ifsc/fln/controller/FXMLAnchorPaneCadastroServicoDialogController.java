@@ -1,10 +1,12 @@
 package br.edu.ifsc.fln.controller;
 
 import br.edu.ifsc.fln.model.domain.Servico;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -19,7 +21,11 @@ public class FXMLAnchorPaneCadastroServicoDialogController implements Initializa
     private Button btConfirmar;
 
     @FXML
-    private TextField tfServico;
+    private TextField tfNome;
+    @FXML
+    private  TextField tfPreco;
+    @FXML
+    private ComboBox cbCategoria;
 
     private Stage dialogStage;
     private boolean btConfirmarClicked = false;
@@ -55,14 +61,16 @@ public class FXMLAnchorPaneCadastroServicoDialogController implements Initializa
 
     public void setServico(Servico servico) {
         this.servico = servico;
-        this.tfServico.setText(servico.getDescricao());
+        this.tfNome.setText(servico.getDescricao());
+        this.tfPreco.setText(String.valueOf(servico.getValor()));
+//        this.cbCategoria.setPlaceholder((servico.getCategoria()));
     }
 
 
     @FXML
     public void handleBtConfirmar() {
         if (validarEntradaDeDados()) {
-            servico.setDescricao(tfServico.getText());
+            servico.setDescricao(tfNome.getText());
 
             btConfirmarClicked = true;
             dialogStage.close();
@@ -77,7 +85,7 @@ public class FXMLAnchorPaneCadastroServicoDialogController implements Initializa
     //método para validar a entrada de dados
     private boolean validarEntradaDeDados() {
         String errorMessage = "";
-        if (this.tfServico.getText() == null || this.tfServico.getText().isEmpty()) {
+        if (this.tfNome.getText() == null || this.tfNome.getText().isEmpty()) {
             errorMessage += "Nome inválido.\n";
         }
 
