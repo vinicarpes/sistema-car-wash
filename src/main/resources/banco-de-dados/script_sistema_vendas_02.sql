@@ -70,3 +70,20 @@ UPDATE estoque SET quantidade=300, qtd_minima=50, qtd_maxima=1000, situacao='ATI
 /* A TENTATIVA DE INSERIR UM ESTOQUE SEM QUE O PRODUTO EXISTA TAMBÉM CAUSARÁ ERRO*/
 /*INSERT INTO estoque(id_produto, quantidade, qtd_minima, qtd_maxima, situacao) VALUES (4, 20, 2, 100, 'ATIVO');*/
 DELETE FROM produto WHERE id = 4;
+
+
+create table modelo(
+                       id int not null auto_increment,
+                       descricao varchar(50) not null,
+                       marca_id int not null,
+                       constraint pk_modelo primary key(id),
+                       constraint fk_modelo_marca foreign key(marca_id) references marca(id)
+)engine = InnoDB;
+
+create table motor(
+                      id_modelo int not null,
+                      potencia int not null,
+                      tipo_combustivel varchar(55) not null,
+                      constraint pk_motor primary key(id_modelo),
+                      constraint fk_motor_modelo foreign key(id_modelo) references modelo(id)
+)engine = InnoDB;
