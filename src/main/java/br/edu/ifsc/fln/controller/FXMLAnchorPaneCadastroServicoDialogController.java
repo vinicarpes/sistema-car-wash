@@ -1,13 +1,12 @@
 package br.edu.ifsc.fln.controller;
 
 import br.edu.ifsc.fln.model.domain.Servico;
+import br.edu.ifsc.fln.model.enums.ECategoria;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -24,8 +23,15 @@ public class FXMLAnchorPaneCadastroServicoDialogController implements Initializa
     private TextField tfNome;
     @FXML
     private  TextField tfPreco;
+    ObservableList<ECategoria> options = FXCollections.observableArrayList(
+            ECategoria.PADRÃO,
+            ECategoria.PEQUENO,
+            ECategoria.MÉDIO,
+            ECategoria.GRANDE,
+            ECategoria.MOTO);
+
     @FXML
-    private ComboBox cbCategoria;
+    private ChoiceBox<ECategoria> cbCategoria;
 
     private Stage dialogStage;
     private boolean btConfirmarClicked = false;
@@ -36,7 +42,7 @@ public class FXMLAnchorPaneCadastroServicoDialogController implements Initializa
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        cbCategoria.setItems(options);
     }
 
     public boolean isBtConfirmarClicked() {
@@ -63,6 +69,7 @@ public class FXMLAnchorPaneCadastroServicoDialogController implements Initializa
         this.servico = servico;
         this.tfNome.setText(servico.getDescricao());
         this.tfPreco.setText(String.valueOf(servico.getValor()));
+        this.cbCategoria.setValue(servico.getCategoria());
 //        this.cbCategoria.setPlaceholder((servico.getCategoria()));
     }
 

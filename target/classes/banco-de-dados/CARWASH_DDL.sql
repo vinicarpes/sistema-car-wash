@@ -17,3 +17,12 @@ create table motor(
     constraint pk_motor primary key(id_modelo),
     constraint fk_motor_modelo foreign key(id_modelo) references modelo(id) on delete cascade
 )engine = InnoDB;
+
+create table servico(
+    id int not null auto_increment,
+    descricao varchar(255) not null,
+    valor decimal(7,2) not null,
+    categoria ENUM('PEQUENO', 'MÉDIO', 'GRANDE', 'MOTO', 'PADRÃO') not null,
+    primary key (id)
+)engine = innodb;
+

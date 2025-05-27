@@ -6,14 +6,19 @@ package br.edu.ifsc.fln.controller;
 
 import br.edu.ifsc.fln.model.domain.Marca;
 import br.edu.ifsc.fln.model.domain.Modelo;
+import br.edu.ifsc.fln.model.enums.ECategoria;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -31,7 +36,7 @@ public class FXMLAnchorPaneCadastroModeloDialogController implements Initializab
 
     @FXML
     private TextField tfNome;
-    
+
     private Stage dialogStage;
     private boolean btConfirmarClicked = false;
     private Modelo modelo;
@@ -74,7 +79,6 @@ public class FXMLAnchorPaneCadastroModeloDialogController implements Initializab
     public void handleBtConfirmar() {
         if (validarEntradaDeDados()) {
             modelo.setDescricao(tfNome.getText());
-
             btConfirmarClicked = true;
             dialogStage.close();
         }
