@@ -88,7 +88,7 @@ public class FXMLAnchorPaneCadastroModeloController implements Initializable {
     }     
     
     public void carregarTableViewModelo() {
-        tableColumnModeloDescricao.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        tableColumnModeloDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
         
         listaModelos = modeloDAO.listar();
         
