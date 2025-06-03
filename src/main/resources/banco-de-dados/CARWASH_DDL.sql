@@ -32,3 +32,31 @@ create table servico(
     primary key (id)
 )engine = innodb;
 
+create table cliente (
+    id int not null auto_increment,
+    nome varchar(100) not null,
+    celular varchar(15) not null,
+    email varchar(150) not null,
+    dataCadastro date not null,
+    primary key (id)
+)engine = InnoDB;
+
+create table pessoa_fisica(
+    id_cliente int not null references cliente(id),
+    cpf varchar(30) not null,
+    data_nascimento date not null,
+    constraint pk_pessoa_fisica primary key (id_cliente),
+    constraint fk_cliente foreign key (id_cliente) references cliente(id)
+                          on delete cascade
+                          on update cascade
+)engine = innodb;
+
+create table pessoa_juridica(
+   id_cliente int not null references cliente(id),
+   cnpj varchar(30) not null,
+   data_nascimento date not null,
+   constraint pk_pessoa_juridica primary key (id_cliente),
+   constraint fk_pj_cliente foreign key (id_cliente) references cliente(id)
+                                  on delete cascade
+                                  on update cascade
+)engine = innodb;
