@@ -2,6 +2,12 @@ select * from cor;
 select * from marca;
 select * from servico;
 
+create table marca(
+    id int not null auto_increment,
+    nome varchar(255) not null,
+    primary key (id)
+)engine = innodb;
+
 create table cor(
     id int not null auto_increment,
     nome varchar(200) not null,
