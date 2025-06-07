@@ -97,6 +97,11 @@ public class FXMLAnchorPaneCadastroModeloDialogController implements Initializab
 
     public void setModelo(Modelo modelo) {
         this.modelo = modelo;
+        tfDescricao.setText(modelo.getDescricao());
+        choiceCategoria.setValue(modelo.geteCategoria());
+        tfPotencia.setText(String.valueOf(modelo.getMotor().getPotencia()));
+        choiceCombustivel.setValue(modelo.getMotor().getETipoCombustivel());
+        comboMarca.setValue(modelo.getMarca());
     }
     
 
