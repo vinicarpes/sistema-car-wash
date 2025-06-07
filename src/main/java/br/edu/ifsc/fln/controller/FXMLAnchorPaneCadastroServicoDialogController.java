@@ -23,12 +23,6 @@ public class FXMLAnchorPaneCadastroServicoDialogController implements Initializa
     private TextField tfNome;
     @FXML
     private  TextField tfPreco;
-    ObservableList<ECategoria> options = FXCollections.observableArrayList(
-            ECategoria.PADRÃO,
-            ECategoria.PEQUENO,
-            ECategoria.MÉDIO,
-            ECategoria.GRANDE,
-            ECategoria.MOTO);
 
     @FXML
     private ChoiceBox<ECategoria> cbCategoria;
@@ -42,7 +36,7 @@ public class FXMLAnchorPaneCadastroServicoDialogController implements Initializa
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        cbCategoria.setItems(options);
+        cbCategoria.getItems().addAll(ECategoria.values());
     }
 
     public boolean isBtConfirmarClicked() {
@@ -70,7 +64,6 @@ public class FXMLAnchorPaneCadastroServicoDialogController implements Initializa
         this.tfNome.setText(servico.getDescricao());
         this.tfPreco.setText(String.valueOf(servico.getValor()));
         this.cbCategoria.setValue(servico.getCategoria());
-//        this.cbCategoria.setPlaceholder((servico.getCategoria()));
     }
 
 
@@ -78,6 +71,8 @@ public class FXMLAnchorPaneCadastroServicoDialogController implements Initializa
     public void handleBtConfirmar() {
         if (validarEntradaDeDados()) {
             servico.setDescricao(tfNome.getText());
+            servico.setValor(Double.parseDouble(tfPreco.getText()));
+            servico.setCategoria(cbCategoria.getValue());
 
             btConfirmarClicked = true;
             dialogStage.close();

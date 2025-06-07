@@ -24,7 +24,7 @@ public class ServicoDAO {
     }
 
     public boolean inserir(Servico servico) {
-        String sql = "INSERT INTO servico(nome) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO servico(descricao, valor, categoria) VALUES(?, ?, ?)";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, servico.getDescricao());
