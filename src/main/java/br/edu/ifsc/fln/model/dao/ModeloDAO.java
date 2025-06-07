@@ -6,10 +6,7 @@ import br.edu.ifsc.fln.model.domain.Motor;
 import br.edu.ifsc.fln.model.enums.ECategoria;
 import br.edu.ifsc.fln.model.enums.ETipoCombustivel;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,13 +24,20 @@ public class ModeloDAO {
     }
 
     public boolean inserir(Modelo modelo) {
-        String sqlModelo = "INSERT INTO modelo(descricao, marca_id) VALUES(?, ?)";
+        String sqlModelo = "INSERT INTO modelo(descricao, marca_id, categoria) VALUES(?, ?, ?)";
         String sqlMotor = "INSERT INTO motor(id_modelo, potencia, tipo_combustivel) VALUES(?,?,?)";
         try {
-            PreparedStatement stmt = connection.prepareStatement(sqlModelo);
+            PreparedStatement stmt = connection.prepareStatement(sqlModelo, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, modelo.getDescricao());
             stmt.setInt(2, modelo.getMarca().getId());
+            stmt.setString(3, modelo.geteCategoria().toString());
             stmt.execute();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                modelo.setId(rs.getInt(1));
+            }
+
             stmt = connection.prepareStatement(sqlMotor);
             stmt.setInt(1, modelo.getId());
             stmt.setInt(2, modelo.getMotor().getPotencia());
@@ -97,11 +101,15 @@ public class ModeloDAO {
             PreparedStatement stmt = connection.prepareStatement(sql);
             ResultSet resultado = stmt.executeQuery();
             while (resultado.next()) {
-//                Modelo modelo = new Modelo();
-//                modelo.setId(resultado.getInt("id"));
-//                modelo.setDescricao(resultado.getString("descricao"));
-////                modelo.setMarca(resultado.getInt);
-//                retorno.add(modelo);
+                Modelo modelo = new Modelo();
+                modelo.setId(resultado.getInt("id"));
+                modelo.setDescricao(resultado.getString("descricao"));
+                modelo.seteCategoria(ECategoria.valueOf(resultado.getString("categoria")));
+                Marca marca = buscarMarca(resultado.getInt("marca_id"));
+                modelo.setMarca(marca);
+                Motor motor = buscarMotor(resultado.getInt("id"));
+                modelo.setMotor(motor);
+                retorno.add(modelo);
             }
         } catch (SQLException ex) {
             Logger.getLogger(ModeloDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -126,7 +134,7 @@ public class ModeloDAO {
                 retorno.setDescricao(resultado.getString("descricao"));
                 retorno.seteCategoria(ECategoria.valueOf(resultado.getString("categoria")));
                 retorno.setMotor(buscarMotor(id));
-                retorno.setMarca(buscarMarca(id));
+                retorno.setMarca(buscarMarca(resultado.getInt("marca_id")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ModeloDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -135,7 +143,7 @@ public class ModeloDAO {
     }
 
     public Motor buscarMotor(int modelo_id) {
-        String sql = "SELECT * FROM motor WHERE id=?";
+        String sql = "SELECT * FROM motor WHERE id_modelo=?";
         Motor retorno = new Motor();
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -151,12 +159,12 @@ public class ModeloDAO {
         return retorno;
     }
 
-    public Marca buscarMarca(int modelo_id) {
-        String sql = "SELECT marca_id FROM modelo WHERE id=?";
+    public Marca buscarMarca(int marca_id) {
+        String sql = "SELECT * FROM marca WHERE id=?";
         Marca retorno = new Marca();
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, modelo_id);
+            stmt.setInt(1, marca_id);
             ResultSet resultado = stmt.executeQuery();
             if (resultado.next()) {
                 retorno.setNome(resultado.getString("nome"));

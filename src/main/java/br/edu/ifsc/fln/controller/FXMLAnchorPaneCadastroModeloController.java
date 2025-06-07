@@ -45,13 +45,16 @@ public class FXMLAnchorPaneCadastroModeloController implements Initializable {
     private Button btInserir;
 
     @FXML
-    private Label lbModeloDescricao;
-
-    @FXML
     private Label lbModeloId;
 
     @FXML
-    private Label lbModeloNome;
+    private Label lbModeloDescricao;
+
+    @FXML
+    private Label lbModeloCategoria;
+
+    @FXML
+    private Label lbMarcaNome;
 
     @FXML
     private Label lbIdMotor;
@@ -99,10 +102,15 @@ public class FXMLAnchorPaneCadastroModeloController implements Initializable {
     public void selecionarItemTableViewModelos(Modelo modelo) {
         if (modelo != null) {
             lbModeloId.setText(String.valueOf(modelo.getId())); 
-            lbModeloNome.setText(modelo.getDescricao());
+            lbModeloDescricao.setText(modelo.getDescricao());
+            lbModeloCategoria.setText(modelo.geteCategoria().toString());
+            lbMarcaNome.setText(modelo.getMarca().getNome());
+            lbModeloId.setText(String.valueOf(modelo.getId()));
+            lbPotenciaMotor.setText(String.valueOf(modelo.getMotor().getPotencia()));
+            lbCombustivelMotor.setText(String.valueOf(modelo.getMotor().getETipoCombustivel()));
         } else {
-            lbModeloId.setText(""); 
-            lbModeloNome.setText("");
+            lbModeloId.setText("");
+            lbModeloDescricao.setText("");
         }
         
     }

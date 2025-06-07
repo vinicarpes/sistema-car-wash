@@ -4,22 +4,29 @@
  */
 package br.edu.ifsc.fln.controller;
 
+import br.edu.ifsc.fln.model.dao.MarcaDAO;
+import br.edu.ifsc.fln.model.dao.ModeloDAO;
+import br.edu.ifsc.fln.model.database.Database;
+import br.edu.ifsc.fln.model.database.DatabaseFactory;
 import br.edu.ifsc.fln.model.domain.Marca;
 import br.edu.ifsc.fln.model.domain.Modelo;
+import br.edu.ifsc.fln.model.domain.Motor;
 import br.edu.ifsc.fln.model.enums.ECategoria;
+import br.edu.ifsc.fln.model.enums.ETipoCombustivel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+
+import static java.lang.Integer.parseInt;
 
 /**
  * FXML Controller class
@@ -35,18 +42,37 @@ public class FXMLAnchorPaneCadastroModeloDialogController implements Initializab
     private Button btConfirmar;
 
     @FXML
-    private TextField tfNome;
+    private TextField tfDescricao;
+
+    @FXML
+    private ChoiceBox<ECategoria> choiceCategoria;
+
+    @FXML
+    private ComboBox<Marca> comboMarca;
+
+    @FXML
+    private TextField tfPotencia;
+
+    @FXML
+    private ChoiceBox<ETipoCombustivel> choiceCombustivel;
 
     private Stage dialogStage;
     private boolean btConfirmarClicked = false;
     private Modelo modelo;
+    private final Database database = DatabaseFactory.getDatabase("mysql");
+    private final Connection connection = database.conectar();
+    private final MarcaDAO marcaDAO = new MarcaDAO();
     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        marcaDAO.setConnection(connection);
+        List<Marca> listaMarcas = marcaDAO.listar();
+        comboMarca.setItems(FXCollections.observableList(listaMarcas));
+        choiceCategoria.getItems().addAll(ECategoria.values());
+        choiceCombustivel.getItems().addAll(ETipoCombustivel.values());
     }       
 
     public boolean isBtConfirmarClicked() {
@@ -71,14 +97,22 @@ public class FXMLAnchorPaneCadastroModeloDialogController implements Initializab
 
     public void setModelo(Modelo modelo) {
         this.modelo = modelo;
-        this.tfNome.setText(modelo.getDescricao());
     }
     
 
     @FXML
     public void handleBtConfirmar() {
         if (validarEntradaDeDados()) {
-            modelo.setDescricao(tfNome.getText());
+            modelo.setDescricao(tfDescricao.getText());
+            modelo.setMarca(comboMarca.getValue());
+            modelo.seteCategoria(choiceCategoria.getValue());
+            Motor motor = modelo.getMotor();
+            motor.setPotencia(Integer.parseInt(tfPotencia.getText()));
+            motor.setETipoCombustivel(choiceCombustivel.getValue());
+
+            btConfirmarClicked = true;
+            dialogStage.close();
+
             btConfirmarClicked = true;
             dialogStage.close();
         }
@@ -92,10 +126,22 @@ public class FXMLAnchorPaneCadastroModeloDialogController implements Initializab
     //método para validar a entrada de dados
     private boolean validarEntradaDeDados() {
         String errorMessage = "";
-        if (this.tfNome.getText() == null || this.tfNome.getText().length() == 0) {
-            errorMessage += "Nome inválido.\n";
+        if (this.tfDescricao.getText() == null || this.tfDescricao.getText().length() == 0) {
+            errorMessage += "Modelo inválido.\n";
         }
-        
+        if (this.choiceCategoria.getSelectionModel().getSelectedItem() == null) {
+            errorMessage += "Categoria inválida.\n";
+        }
+        if (this.comboMarca.getSelectionModel().getSelectedItem() == null) {
+            errorMessage += "Marca inválida.\n";
+        }
+        if (this.tfPotencia.getText() == null || this.tfPotencia.getText().length() == 0) {
+            errorMessage += "Potência inválida.\n";
+        }
+        if (this.choiceCombustivel.getSelectionModel().getSelectedItem() == null) {
+            errorMessage += "Combustível inválido.\n";
+        }
+
         if (errorMessage.length() == 0) {
             return true;
         } else {
