@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.edu.ifsc.fln.controller.FXMLVBoxMainAppController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.edu.ifsc.fln.controller.FXMLVBoxMainAppController">
    <children>
       <MenuBar>
         <menus>
@@ -16,7 +16,7 @@
               <MenuItem fx:id="menuItemCadastroCor" mnemonicParsing="false" onAction="#handleMenuItemCadastroCor" text="Cor" />
                   <MenuItem fx:id="menuItemCadastroMarca" mnemonicParsing="false" onAction="#handleMenuItemCadastroMarca" text="Marca" />
                   <MenuItem fx:id="menuItemCadastroModelo" mnemonicParsing="false" onAction="#handleMenuItemCadastroModelo" text="Modelo" />
-                  <MenuItem fx:id="menuItemCadastroVeiculo" mnemonicParsing="false" text="Veiculo" />
+                  <MenuItem fx:id="menuItemCadastroVeiculo" mnemonicParsing="false" onAction="#handleMenuItemCadastroVeiculo" text="Veiculo" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="menuItemCadastroCliente" mnemonicParsing="false" onAction="#handleMenuItemCadastroCliente" text="Cliente" />
                   <SeparatorMenuItem mnemonicParsing="false" />

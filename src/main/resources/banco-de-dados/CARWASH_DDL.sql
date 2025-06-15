@@ -66,3 +66,16 @@ create table pessoa_juridica(
                                   on delete cascade
                                   on update cascade
 )engine = innodb;
+
+create table veiculo(
+    id int not null auto_increment,
+    placa varchar(20) not null unique,
+    observacao varchar(255),
+    modelo_id int not null references modelo(id),
+    cliente_id int not null references cliente(id),
+    cor_id int not null references cor(id),
+    constraint pk_veiculo primary key (id),
+    constraint fk_modelo foreign key (modelo_id) references modelo(id),
+    constraint fk_cliente_veiculo foreign key (cliente_id) references cliente(id),
+    constraint fk_cor foreign key(cor_id) references cor(id)
+)engine=innodb;

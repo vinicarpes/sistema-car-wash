@@ -96,6 +96,8 @@ public class ModeloDAO {
 
     public List<Modelo> listar() {
         String sql = "SELECT * FROM modelo";
+        MarcaDAO marcaDAO = new MarcaDAO();
+        marcaDAO.setConnection(connection);
         List<Modelo> retorno = new ArrayList<>();
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -105,7 +107,7 @@ public class ModeloDAO {
                 modelo.setId(resultado.getInt("id"));
                 modelo.setDescricao(resultado.getString("descricao"));
                 modelo.seteCategoria(ECategoria.valueOf(resultado.getString("categoria")));
-                Marca marca = buscarMarca(resultado.getInt("marca_id"));
+                Marca marca = marcaDAO.buscar(resultado.getInt("marca_id"));
                 modelo.setMarca(marca);
                 Motor motor = buscarMotor(resultado.getInt("id"));
                 modelo.setMotor(motor);
@@ -124,6 +126,8 @@ public class ModeloDAO {
 
     public Modelo buscar(int id) {
         String sql = "SELECT * FROM modelo WHERE id=?";
+        MarcaDAO marcaDAO = new MarcaDAO();
+        marcaDAO.setConnection(connection);
         Modelo retorno = new Modelo();
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -134,7 +138,7 @@ public class ModeloDAO {
                 retorno.setDescricao(resultado.getString("descricao"));
                 retorno.seteCategoria(ECategoria.valueOf(resultado.getString("categoria")));
                 retorno.setMotor(buscarMotor(id));
-                retorno.setMarca(buscarMarca(resultado.getInt("marca_id")));
+                retorno.setMarca(marcaDAO.buscar(resultado.getInt("marca_id")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ModeloDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -159,20 +163,4 @@ public class ModeloDAO {
         return retorno;
     }
 
-    public Marca buscarMarca(int marca_id) {
-        String sql = "SELECT * FROM marca WHERE id=?";
-        Marca retorno = new Marca();
-        try {
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, marca_id);
-            ResultSet resultado = stmt.executeQuery();
-            if (resultado.next()) {
-                retorno.setNome(resultado.getString("nome"));
-                retorno.setId(resultado.getInt("id"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ModeloDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return retorno;
-    }
 }
