@@ -110,7 +110,7 @@ public class FXMLAnchorPaneCadastroVeiculoController implements Initializable {
             lbId.setText(String.valueOf(veiculo.getId()));
             lbPlaca.setText(veiculo.getPlaca());
             lbMarca.setText(veiculo.getModelo().getMarca().getNome());
-            lbModelo.setText(veiculo.getModelo().getMarca().getNome());
+            lbModelo.setText(veiculo.getModelo().getDescricao());
             lbMotorPotencia.setText(String.valueOf(veiculo.getModelo().getMotor().getPotencia()));
             lbCombustivel.setText(String.valueOf(veiculo.getModelo().getMotor().getETipoCombustivel()));
             lbCor.setText(veiculo.getCor().getNome());

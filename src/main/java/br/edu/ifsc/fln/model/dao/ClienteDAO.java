@@ -154,30 +154,55 @@ public class ClienteDAO {
     return retorno;
 }
 
-//    public Cliente buscar(Cliente cliente) {
-//        String sql = "SELECT * FROM cliente WHERE id=?";
-//        Cliente retorno;
-//        try {
-//            PreparedStatement stmt = connection.prepareStatement(sql);
-//            stmt.setInt(1, cliente.getId());
-//            ResultSet resultado = stmt.executeQuery();
-//            if (resultado.next()) {
-//                retorno = populateVO(resultado);
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return retorno;
-//    }
-    
-//    private Cliente populateVO(ResultSet rs) throws SQLException {
-//        Cliente cliente = new Cliente();
-//        cliente.setId(rs.getInt("id"));
-//        cliente.setNome(rs.getString("nome"));
-//        cliente.setCpf(rs.getString("cpf"));
-//        cliente.setTelefone(rs.getString("telefone"));
-//        cliente.setEndereco(rs.getString("endereco"));
-//        cliente.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
-//        return cliente;
-//    }
+
+    public Cliente buscar(int clienteId) {
+        String sql = """
+        SELECT c.id, c.nome, c.celular, c.email, c.data_cadastro,
+               pf.cpf, pf.data_nascimento,
+               pj.cnpj, pj.inscricao_estadual
+        FROM cliente c
+        LEFT JOIN pessoa_fisica pf ON c.id = pf.id_cliente
+        LEFT JOIN pessoa_juridica pj ON c.id = pj.id_cliente
+        WHERE c.id = ?
+    """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, clienteId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return populateVO(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    private Cliente populateVO(ResultSet rs) throws SQLException {
+        Cliente cliente;
+        if (rs.getString("cpf") != null) {
+            PessoaFisica pf = new PessoaFisica();
+            pf.setId(rs.getInt("id"));
+            pf.setNome(rs.getString("nome"));
+            pf.setCelular(rs.getString("celular"));
+            pf.setEmail(rs.getString("email"));
+            pf.setDataCadastro(rs.getDate("data_cadastro").toLocalDate());
+            pf.setCpf(rs.getString("cpf"));
+            pf.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
+            cliente = pf;
+        } else {
+            PessoaJuridica pj = new PessoaJuridica();
+            pj.setId(rs.getInt("id"));
+            pj.setNome(rs.getString("nome"));
+            pj.setCelular(rs.getString("celular"));
+            pj.setEmail(rs.getString("email"));
+            pj.setDataCadastro(rs.getDate("data_cadastro").toLocalDate());
+            pj.setCnpj(rs.getString("cnpj"));
+            pj.setInscricaoEstadual(rs.getString("inscricao_estadual"));
+            cliente = pj;
+        }
+        return cliente;
+    }
+
 }

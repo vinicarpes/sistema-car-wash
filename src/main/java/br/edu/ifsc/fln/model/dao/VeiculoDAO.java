@@ -15,6 +15,7 @@ public class VeiculoDAO {
 
     private ModeloDAO modeloDAO = new ModeloDAO();
     private CorDAO corDAO = new CorDAO();
+    private ClienteDAO clienteDAO = new ClienteDAO();
 
 
     public Connection getConnection() {
@@ -79,6 +80,7 @@ public class VeiculoDAO {
         List<Veiculo> retorno = new ArrayList<>();
         modeloDAO.setConnection(connection);
         corDAO.setConnection(connection);
+        clienteDAO.setConnection(connection);
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             ResultSet resultado = stmt.executeQuery();
@@ -87,7 +89,7 @@ public class VeiculoDAO {
                 veiculo.setId(resultado.getInt("id"));
                 veiculo.setPlaca(resultado.getString("placa"));
                 veiculo.setModelo(modeloDAO.buscar(resultado.getInt("modelo_id")));
-//                veiculo.setCliente(buscarCliente(resultado.getInt("cliente_id")));
+                veiculo.setCliente(clienteDAO.buscar(resultado.getInt("cliente_id")));
                 veiculo.setCor(corDAO.buscar(resultado.getInt("cor_id")));
                 veiculo.setObservacao(resultado.getString("observacao"));
 
