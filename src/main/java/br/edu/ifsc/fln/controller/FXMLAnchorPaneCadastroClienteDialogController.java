@@ -1,26 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package br.edu.ifsc.fln.controller;
 
 import br.edu.ifsc.fln.model.domain.Cliente;
+import br.edu.ifsc.fln.model.domain.PessoaFisica;
+import br.edu.ifsc.fln.model.domain.PessoaJuridica;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-/**
- * FXML Controller class
- *
- * @author mpisc
- */
 public class FXMLAnchorPaneCadastroClienteDialogController implements Initializable {
 
     @FXML
@@ -33,39 +24,67 @@ public class FXMLAnchorPaneCadastroClienteDialogController implements Initializa
     private DatePicker dpDataNascimento;
 
     @FXML
-    private TextField tfCpf;
+    private TextField tfDoc;
 
     @FXML
-    private TextField tfEndereco;
+    private Label lbDoc;
+
+    @FXML
+    private Label lbInscricaoEstadual;
+
+    @FXML
+    private TextField tfInscricaoEstadual;
 
     @FXML
     private TextField tfNome;
 
     @FXML
-    private TextField tfTelefone;
-    
+    private TextField tfCelular;
+
+    @FXML
+    private TextField tfEmail;
+
+    @FXML
+    private Label lbDataNascimento;
+
+    @FXML
+    private ChoiceBox<String> cbNatureza;
+
     private Stage dialogStage;
     private boolean btConfirmarClicked = false;
     private Cliente cliente;
-    
-    /**
-     * Initializes the controller class.
-     */
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }       
+        cbNatureza.getItems().addAll("Pessoa Fisica", "Pessoa Juridica");
+        cbNatureza.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> configurarCampos(newValue)
+        );
+        lbDataNascimento.setVisible(false);
+        dpDataNascimento.setVisible(false);
+
+        lbInscricaoEstadual.setDisable(true);
+        tfInscricaoEstadual.setDisable(true);
+
+    }
+
+    private void configurarCampos(String natureza) {
+        boolean isPessoaFisica = "Pessoa Fisica".equals(natureza);
+
+        lbDoc.setText(isPessoaFisica ? "CPF:" : "CNPJ:");
+        tfDoc.setVisible(true);
+        lbDataNascimento.setVisible(isPessoaFisica);
+        dpDataNascimento.setVisible(isPessoaFisica);
+
+        lbInscricaoEstadual.setVisible(!isPessoaFisica);
+        tfInscricaoEstadual.setVisible(!isPessoaFisica);
+        lbInscricaoEstadual.setDisable(isPessoaFisica);
+        tfInscricaoEstadual.setDisable(isPessoaFisica);
+
+    }
 
     public boolean isBtConfirmarClicked() {
         return btConfirmarClicked;
-    }
-
-    public void setBtConfirmarClicked(boolean btConfirmarClicked) {
-        this.btConfirmarClicked = btConfirmarClicked;
-    }
-
-    public Stage getDialogStage() {
-        return dialogStage;
     }
 
     public void setDialogStage(Stage dialogStage) {
@@ -78,52 +97,95 @@ public class FXMLAnchorPaneCadastroClienteDialogController implements Initializa
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
-        this.tfNome.setText(this.cliente.getNome());
-        this.tfCpf.setText(this.cliente.getCpf());
-        this.tfTelefone.setText(this.cliente.getTelefone());
-        this.tfEndereco.setText(this.cliente.getEndereco());
-        dpDataNascimento.setValue(this.cliente.getDataNascimento());
+
+        if (cliente != null) {
+
+        cbNatureza.setValue(cliente instanceof PessoaFisica ? "Pessoa Fisica" : "Pessoa Juridica");
+        tfNome.setText(cliente.getNome());
+        tfCelular.setText(cliente.getCelular());
+        tfEmail.setText(cliente.getEmail());
+
+        if (cliente instanceof PessoaFisica) {
+            PessoaFisica pf = (PessoaFisica) cliente;
+            tfDoc.setText(pf.getCpf());
+            dpDataNascimento.setValue(pf.getDataNascimento());
+        } else if (cliente instanceof PessoaJuridica) {
+            PessoaJuridica pj = (PessoaJuridica) cliente;
+            tfDoc.setText(pj.getCnpj());
+            tfInscricaoEstadual.setText(pj.getInscricaoEstadual());
+        }
+        }
+        configurarCampos(cbNatureza.getValue());
     }
-    
 
     @FXML
     public void handleBtConfirmar() {
         if (validarEntradaDeDados()) {
-            cliente.setNome(tfNome.getText());
-            cliente.setCpf(tfCpf.getText());
-            cliente.setTelefone(tfTelefone.getText());
-            cliente.setEndereco(tfEndereco.getText());
-            cliente.setDataNascimento(dpDataNascimento.getValue());
+            if (cbNatureza.getValue().equals("Pessoa Fisica")) {
+                PessoaFisica pf = cliente instanceof PessoaFisica ? (PessoaFisica) cliente : new PessoaFisica();
+
+                pf.setNome(tfNome.getText());
+                pf.setCpf(tfDoc.getText());
+                pf.setCelular(tfCelular.getText());
+                pf.setEmail(tfEmail.getText());
+                pf.setDataNascimento(dpDataNascimento.getValue());
+
+                cliente = pf;
+
+            } else if (cbNatureza.getValue().equals("Pessoa Juridica")) {
+                PessoaJuridica pj = cliente instanceof PessoaJuridica ? (PessoaJuridica) cliente : new PessoaJuridica();
+
+                pj.setNome(tfNome.getText());
+                pj.setCelular(tfCelular.getText());
+                pj.setEmail(tfEmail.getText());
+                pj.setCnpj(tfDoc.getText());
+                pj.setInscricaoEstadual(tfInscricaoEstadual.getText());
+
+                cliente = pj;
+            }
 
             btConfirmarClicked = true;
             dialogStage.close();
         }
     }
-    
+
     @FXML
     public void handleBtCancelar() {
         dialogStage.close();
     }
-    
-    //método para validar a entrada de dados
+
     private boolean validarEntradaDeDados() {
         String errorMessage = "";
-        if (this.tfNome.getText() == null || this.tfNome.getText().length() == 0) {
+
+        if (tfNome.getText() == null || tfNome.getText().isEmpty()) {
             errorMessage += "Nome inválido.\n";
         }
-        
-        if (this.tfCpf.getText() == null || this.tfCpf.getText().length() == 0) {
-            errorMessage += "CPF inválido.\n";
+
+        if (tfDoc.getText() == null || tfDoc.getText().isEmpty()) {
+            errorMessage += (cbNatureza.getValue().equals("Pessoa Fisica") ? "CPF inválido.\n" : "CNPJ inválido.\n");
         }
-        
-        if (this.tfTelefone.getText() == null || this.tfTelefone.getText().length() == 0) {
-            errorMessage += "Telefone inválido.\n";
+
+        if (cbNatureza.getValue() == null) {
+            errorMessage += "Selecione a natureza (Pessoa Física ou Jurídica).\n";
+        } else if (cbNatureza.getValue().equals("Pessoa Fisica")) {
+            if (dpDataNascimento.getValue() == null) {
+                errorMessage += "Data de nascimento inválida.\n";
+            }
+            if (tfCelular.getText() == null || tfCelular.getText().isEmpty()) {
+                errorMessage += "Celular inválido.\n";
+            }
+            if (tfEmail.getText() == null || tfEmail.getText().isEmpty()) {
+                errorMessage += "Email inválido.\n";
+            }
+        } else if (cbNatureza.getValue().equals("Pessoa Juridica")) {
+            if (tfInscricaoEstadual.getText() == null || tfInscricaoEstadual.getText().isEmpty()) {
+                errorMessage += "Inscrição Estadual inválida.\n";
+            }
         }
-        
-        if (errorMessage.length() == 0) {
+
+        if (errorMessage.isEmpty()) {
             return true;
         } else {
-            //exibindo uma mensagem de erro
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro no cadastro");
             alert.setHeaderText("Corrija os campos inválidos!");
@@ -132,5 +194,4 @@ public class FXMLAnchorPaneCadastroClienteDialogController implements Initializa
             return false;
         }
     }
-    
 }

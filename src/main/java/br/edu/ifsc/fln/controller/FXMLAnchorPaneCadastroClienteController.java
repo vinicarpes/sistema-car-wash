@@ -8,6 +8,8 @@ import br.edu.ifsc.fln.model.dao.ClienteDAO;
 import br.edu.ifsc.fln.model.database.Database;
 import br.edu.ifsc.fln.model.database.DatabaseFactory;
 import br.edu.ifsc.fln.model.domain.Cliente;
+import br.edu.ifsc.fln.model.domain.PessoaFisica;
+import br.edu.ifsc.fln.model.domain.PessoaJuridica;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,6 +21,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -33,7 +36,7 @@ import java.util.ResourceBundle;
  */
 public class FXMLAnchorPaneCadastroClienteController implements Initializable {
 
-    
+
     @FXML
     private Button btAlterar;
 
@@ -47,10 +50,13 @@ public class FXMLAnchorPaneCadastroClienteController implements Initializable {
     private Label lbClienteId;
 
     @FXML
-    private Label lbClienteCPF;
+    private Label lbClienteDoc;
 
     @FXML
-    private Label lbClienteDataNascimento;
+    private Label lbClienteNascimento;
+
+    @FXML
+    private Label lbClienteIE;
 
     @FXML
     private Label lbClienteNome;
@@ -59,10 +65,19 @@ public class FXMLAnchorPaneCadastroClienteController implements Initializable {
     private Label lbClienteTelefone;
 
     @FXML
-    private Label lbClienteEndereco;
-    
+    private Label lbClienteEmail;
+
     @FXML
-    private TableColumn<Cliente, String> tableColumnClienteCPF;
+    private Label lbClienteDtCadastro;
+
+    @FXML
+    private Label lbClienteDtNascimento;
+
+    @FXML
+    private Label lbClienteInscricaoEstadual;
+
+    @FXML
+    private TableColumn<Cliente, String> tableColumnCliente;
 
     @FXML
     private TableColumn<Cliente, String> tableColumnClienteNome;
@@ -70,14 +85,14 @@ public class FXMLAnchorPaneCadastroClienteController implements Initializable {
     @FXML
     private TableView<Cliente> tableViewClientes;
 
-    
+
     private List<Cliente> listaClientes;
     private ObservableList<Cliente> observableListClientes;
-    
+
     private final Database database = DatabaseFactory.getDatabase("mysql");
     private final Connection connection = database.conectar();
     private final ClienteDAO clienteDAO = new ClienteDAO();
-    
+
     /**
      * Initializes the controller class.
      */
@@ -85,58 +100,67 @@ public class FXMLAnchorPaneCadastroClienteController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         clienteDAO.setConnection(connection);
         carregarTableViewCliente();
-        
+
         tableViewClientes.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> selecionarItemTableViewClientes(newValue));
-    }     
-    
+    }
+
     public void carregarTableViewCliente() {
         tableColumnClienteNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        tableColumnClienteCPF.setCellValueFactory(new PropertyValueFactory<>("cpf"));
-        
+        tableColumnCliente.setCellValueFactory(new PropertyValueFactory<>("documento"));
+
         listaClientes = clienteDAO.listar();
-        
+
         observableListClientes = FXCollections.observableArrayList(listaClientes);
         tableViewClientes.setItems(observableListClientes);
     }
-    
+
     public void selecionarItemTableViewClientes(Cliente cliente) {
         if (cliente != null) {
-            lbClienteId.setText(String.valueOf(cliente.getId())); 
+            lbClienteId.setText(String.valueOf(cliente.getId()));
             lbClienteNome.setText(cliente.getNome());
-            lbClienteCPF.setText(cliente.getCpf());
-            lbClienteTelefone.setText(cliente.getTelefone());
-            lbClienteEndereco.setText(cliente.getEndereco());
-            lbClienteDataNascimento.setText(String.valueOf(
-                    cliente.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
-        } else {
-            lbClienteId.setText(""); 
-            lbClienteNome.setText("");
-            lbClienteCPF.setText("");
-            lbClienteTelefone.setText("");
-            lbClienteEndereco.setText("");
-            lbClienteDataNascimento.setText("");
+            lbClienteEmail.setText(cliente.getEmail());
+            lbClienteTelefone.setText(cliente.getCelular());
+            lbClienteDtCadastro.setText(cliente.getDataCadastro().toString());
+            if (cliente instanceof PessoaFisica) {
+                lbClienteNascimento.setVisible(true);
+                lbClienteDtNascimento.setVisible(true);
+                lbClienteIE.setVisible(false);
+                lbClienteInscricaoEstadual.setVisible(false);
+                lbClienteDtNascimento.setText(((PessoaFisica) cliente).getDataNascimento().toString());
+                lbClienteDoc.setText(((PessoaFisica) cliente).getCpf());
+            }else if (cliente instanceof PessoaJuridica) {
+                lbClienteNascimento.setVisible(false);
+                lbClienteDtNascimento.setVisible(false);
+                lbClienteIE.setVisible(true);
+                lbClienteInscricaoEstadual.setVisible(true);
+                lbClienteDoc.setText((((PessoaJuridica) cliente).getCnpj()));
+                lbClienteInscricaoEstadual.setText((((PessoaJuridica) cliente).getInscricaoEstadual()));
+            }
         }
-        
+
     }
-    
+
     @FXML
     public void handleBtInserir() throws IOException {
-        Cliente cliente = new Cliente();
-        boolean btConfirmarClicked = showFXMLAnchorPaneCadastroClienteDialog(cliente);
-        if (btConfirmarClicked) {
-            clienteDAO.inserir(cliente);
+        Cliente novoCliente = showFXMLAnchorPaneCadastroClienteDialog(null);
+
+        if (novoCliente != null) {
+            clienteDAO.inserir(novoCliente);
             carregarTableViewCliente();
-        } 
+        }
     }
-    
-    @FXML 
+
+
+
+    @FXML
     public void handleBtAlterar() throws IOException {
         Cliente cliente = tableViewClientes.getSelectionModel().getSelectedItem();
         if (cliente != null) {
-            boolean btConfirmarClicked = showFXMLAnchorPaneCadastroClienteDialog(cliente);
+//            boolean btConfirmarClicked = showFXMLAnchorPaneCadastroClienteDialog(cliente);
+            boolean btConfirmarClicked = false;
             if (btConfirmarClicked) {
-                clienteDAO.alterar(cliente);
+//                clienteDAO.alterar(cliente);
                 carregarTableViewCliente();
             }
         } else {
@@ -145,7 +169,7 @@ public class FXMLAnchorPaneCadastroClienteController implements Initializable {
             alert.show();
         }
     }
-    
+
     @FXML
     public void handleBtExcluir() throws IOException {
         Cliente cliente = tableViewClientes.getSelectionModel().getSelectedItem();
@@ -159,26 +183,28 @@ public class FXMLAnchorPaneCadastroClienteController implements Initializable {
         }
     }
 
-    private boolean showFXMLAnchorPaneCadastroClienteDialog(Cliente cliente) throws IOException {
+    private Cliente showFXMLAnchorPaneCadastroClienteDialog(Cliente cliente) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(FXMLAnchorPaneCadastroClienteController.class.getResource("../view/FXMLAnchorPaneCadastroClienteDialog.fxml"));
-        AnchorPane page = (AnchorPane) loader.load();
-        
-        //criação de um estágio de diálogo (StageDialog)
+        loader.setLocation(FXMLAnchorPaneCadastroClienteController.class.getResource("/view/FXMLAnchorPaneCadastroClienteDialog.fxml"));
+
+        AnchorPane page = loader.load();
+
         Stage dialogStage = new Stage();
         dialogStage.setTitle("Cadastro de Cliente");
         Scene scene = new Scene(page);
         dialogStage.setScene(scene);
-        
-        //enviando o obejto cliente para o controller
+
         FXMLAnchorPaneCadastroClienteDialogController controller = loader.getController();
         controller.setDialogStage(dialogStage);
         controller.setCliente(cliente);
-        
-        //apresenta o diálogo e aguarda a confirmação do usuário
+
         dialogStage.showAndWait();
-        
-        return controller.isBtConfirmarClicked();
+
+        if (controller.isBtConfirmarClicked()) {
+            return controller.getCliente(); // aqui pega o cliente preenchido corretamente
+        } else {
+            return null;
+        }
     }
-    
+
 }

@@ -26,13 +26,14 @@ public class VeiculoDAO {
     }
 
     public boolean inserir(Veiculo veiculo) {
-        String sqlVeiculo = "INSERT INTO veiculo(placa, observacao, modelo_id, cliente_id) VALUES(?, ?, ?, ?)";
+        String sqlVeiculo = "INSERT INTO veiculo(placa, observacao, modelo_id, cliente_id, cor_id) VALUES(?, ?, ?, ?, ?)";
         try {
             PreparedStatement stmt = connection.prepareStatement(sqlVeiculo, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, veiculo.getPlaca());
             stmt.setString(2, veiculo.getObservacao());
             stmt.setInt(3, veiculo.getModelo().getId());
             stmt.setInt(4, veiculo.getCliente().getId());
+            stmt.setInt(5, veiculo.getCor().getId());
             stmt.execute();
 
             return true;
@@ -86,7 +87,7 @@ public class VeiculoDAO {
                 veiculo.setId(resultado.getInt("id"));
                 veiculo.setPlaca(resultado.getString("placa"));
                 veiculo.setModelo(modeloDAO.buscar(resultado.getInt("modelo_id")));
-                veiculo.setCliente(buscarCliente(resultado.getInt("cliente_id")));
+//                veiculo.setCliente(buscarCliente(resultado.getInt("cliente_id")));
                 veiculo.setCor(corDAO.buscar(resultado.getInt("cor_id")));
                 veiculo.setObservacao(resultado.getString("observacao"));
 
@@ -116,7 +117,7 @@ public class VeiculoDAO {
                 retorno.setPlaca(resultado.getString("placa"));
                 retorno.setModelo(modeloDAO.buscar(resultado.getInt("modelo_id")));
                 retorno.setCor(corDAO.buscar(resultado.getInt("cor_id")));
-                retorno.setCliente(buscarCliente(resultado.getInt("cliente_id")));
+//                retorno.setCliente(buscarCliente(resultado.getInt("cliente_id")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -124,22 +125,22 @@ public class VeiculoDAO {
         return retorno;
     }
 
-    public Cliente buscarCliente(int veiculo_id) {
-        String sql = "SELECT * FROM cliente WHERE id_veiculo=?";
-        Cliente retorno = new Cliente();
-        try {
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, veiculo_id);
-            ResultSet resultado = stmt.executeQuery();
-            if (resultado.next()) {
-//                retorno.set(resultado.getInt("potencia"));
-//                retorno.setETipoCombustivel(ETipoCombustivel.valueOf(resultado.getString("tipo_combustivel")));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return retorno;
-    }
+//    public Cliente buscarCliente(int veiculo_id) {
+//        String sql = "SELECT * FROM cliente WHERE id_veiculo=?";
+////        Cliente retorno = new Cliente();
+//        try {
+//            PreparedStatement stmt = connection.prepareStatement(sql);
+//            stmt.setInt(1, veiculo_id);
+//            ResultSet resultado = stmt.executeQuery();
+//            if (resultado.next()) {
+////                retorno.set(resultado.getInt("potencia"));
+////                retorno.setETipoCombustivel(ETipoCombustivel.valueOf(resultado.getString("tipo_combustivel")));
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return retorno;
+//    }
 
 
 }

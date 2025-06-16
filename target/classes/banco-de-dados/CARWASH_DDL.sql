@@ -43,7 +43,7 @@ create table cliente (
     nome varchar(100) not null,
     celular varchar(15) not null,
     email varchar(150) not null,
-    dataCadastro date not null,
+    data_cadastro date not null,
     primary key (id)
 )engine = InnoDB;
 
@@ -60,7 +60,7 @@ create table pessoa_fisica(
 create table pessoa_juridica(
    id_cliente int not null references cliente(id),
    cnpj varchar(30) not null,
-   data_nascimento date not null,
+    inscricao_estadual varchar(50)not null,
    constraint pk_pessoa_juridica primary key (id_cliente),
    constraint fk_pj_cliente foreign key (id_cliente) references cliente(id)
                                   on delete cascade
