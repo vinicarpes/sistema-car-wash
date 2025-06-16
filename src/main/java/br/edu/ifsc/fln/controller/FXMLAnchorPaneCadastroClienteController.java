@@ -152,15 +152,13 @@ public class FXMLAnchorPaneCadastroClienteController implements Initializable {
     }
 
 
-
     @FXML
     public void handleBtAlterar() throws IOException {
-        Cliente cliente = tableViewClientes.getSelectionModel().getSelectedItem();
-        if (cliente != null) {
-//            boolean btConfirmarClicked = showFXMLAnchorPaneCadastroClienteDialog(cliente);
-            boolean btConfirmarClicked = false;
-            if (btConfirmarClicked) {
-//                clienteDAO.alterar(cliente);
+        Cliente clienteSelecionado = tableViewClientes.getSelectionModel().getSelectedItem();
+        if (clienteSelecionado != null) {
+            Cliente clienteAtualizado = showFXMLAnchorPaneCadastroClienteDialog(clienteSelecionado);
+            if (clienteAtualizado != null) {
+                clienteDAO.alterar(clienteAtualizado);
                 carregarTableViewCliente();
             }
         } else {

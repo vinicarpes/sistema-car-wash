@@ -105,6 +105,8 @@ public class FXMLAnchorPaneCadastroClienteDialogController implements Initializa
         tfCelular.setText(cliente.getCelular());
         tfEmail.setText(cliente.getEmail());
 
+        cbNatureza.setDisable(true);
+
         if (cliente instanceof PessoaFisica) {
             PessoaFisica pf = (PessoaFisica) cliente;
             tfDoc.setText(pf.getCpf());

@@ -61,23 +61,31 @@ public class ClienteDAO {
 
 
 
-//    public boolean alterar(Cliente cliente) {
-//        String sql = "UPDATE cliente SET nome=?, cpf=?, telefone=?, endereco=?, data_nascimento=? WHERE id=?";
-//        try {
-//            PreparedStatement stmt = connection.prepareStatement(sql);
-//            stmt.setString(1, cliente.getNome());
-//            stmt.setString(2, cliente.getCpf());
-//            stmt.setString(3, cliente.getTelefone());
-//            stmt.setString(4, cliente.getEndereco());
-//            stmt.setDate(5, java.sql.Date.valueOf(cliente.getDataNascimento()));
-//            stmt.setInt(6, cliente.getId());
-//            stmt.execute();
-//            return true;
-//        } catch (SQLException ex) {
-//            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
-//            return false;
-//        }
-//    }
+    public boolean alterar(Cliente cliente) {
+        String sqlCliente = "UPDATE cliente SET nome=?, celular=?, email=?, data_cadastro=? WHERE id=?";
+
+        try {
+            // Atualiza tabela cliente
+            PreparedStatement stmt = connection.prepareStatement(sqlCliente);
+            stmt.setString(1, cliente.getNome());
+            stmt.setString(2, cliente.getCelular());
+            stmt.setString(3, cliente.getEmail());
+            stmt.setDate(4, java.sql.Date.valueOf(cliente.getDataCadastro()));
+            stmt.setInt(5, cliente.getId());
+            stmt.executeUpdate();
+            stmt.close();
+
+            // Atualiza dados complementares conforme o tipo de cliente
+            boolean complementoAtualizado = cliente.atualizarComplemento(connection);
+
+            return complementoAtualizado;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
 
     public boolean remover(Cliente cliente) {
         String sql = "DELETE FROM cliente WHERE id=?";

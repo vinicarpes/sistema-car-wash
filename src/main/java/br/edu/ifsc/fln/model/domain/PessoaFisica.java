@@ -24,6 +24,19 @@ public class PessoaFisica extends Cliente{
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
+    // Em PessoaFisica:
+    @Override
+    public boolean atualizarComplemento(Connection connection) throws SQLException {
+        String sql = "UPDATE pessoa_fisica SET cpf=?, data_nascimento=? WHERE id_cliente=?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, getCpf());
+            stmt.setDate(2, java.sql.Date.valueOf(getDataNascimento()));
+            stmt.setInt(3, getId());
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        }
+    }
+
 
     @Override
     public void inserirComplemento(Connection connection, int idCliente) throws SQLException {

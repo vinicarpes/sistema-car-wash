@@ -60,6 +60,9 @@ public abstract class Cliente {
         this.id = id;
     }
 
+    public abstract boolean atualizarComplemento(Connection connection) throws SQLException;
+
+
     public String getDocumento() {
         if (this instanceof PessoaFisica) {
             return ((PessoaFisica) this).getCpf();

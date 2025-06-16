@@ -24,6 +24,20 @@ public class PessoaJuridica extends Cliente{
         this.inscricaoEstadual = inscricaoEstadual;
     }
 
+    // Em PessoaJuridica:
+    @Override
+    public boolean atualizarComplemento(Connection connection) throws SQLException {
+        String sql = "UPDATE pessoa_juridica SET cnpj=?, inscricao_estadual=? WHERE id_cliente=?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, getCnpj());
+            stmt.setString(2, getInscricaoEstadual());
+            stmt.setInt(3, getId());
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        }
+    }
+
+
     @Override
     public void inserirComplemento(Connection connection, int idCliente) throws SQLException {
         String sql = "INSERT INTO pessoa_juridica(id_cliente, cnpj, inscricao_estadual) VALUES(?, ?, ?)";
