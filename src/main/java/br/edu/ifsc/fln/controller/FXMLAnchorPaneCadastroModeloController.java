@@ -132,6 +132,7 @@ public class FXMLAnchorPaneCadastroModeloController implements Initializable {
             boolean btConfirmarClicked = showFXMLAnchorPaneCadastroModeloDialog(modelo);
             if (btConfirmarClicked) {
                 modeloDAO.alterar(modelo);
+                modeloDAO.alterar(modelo, modelo.getMotor());
                 carregarTableViewModelo();
             }
         } else {
