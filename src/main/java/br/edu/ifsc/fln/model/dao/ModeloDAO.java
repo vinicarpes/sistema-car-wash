@@ -67,11 +67,11 @@ public class ModeloDAO {
     }
 
     public boolean alterar(Modelo modelo, Motor motor) {
-        String sql = "UPDATE motor SET potencia=?, tipo_combustivel=? WHERE id=?";
+        String sql = "UPDATE motor SET potencia=?, tipo_combustivel=? WHERE id_modelo=?";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, motor.getPotencia());
-            stmt.setString(2, motor.getETipoCombustivel().toString());
+            stmt.setString(2, motor.getETipoCombustivel().name());
             stmt.setInt(3, modelo.getId());
             stmt.execute();
             return true;
