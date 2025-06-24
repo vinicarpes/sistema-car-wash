@@ -18,6 +18,7 @@ create table modelo(
 	id int not null auto_increment,
     descricao varchar(50) not null,
     marca_id int not null,
+    categoria ENUM('PEQUENO', 'GRANDE', 'PADRÃO', 'MÉDIO', 'MOTO') not null,
     constraint pk_modelo primary key(id),
     constraint fk_modelo_marca foreign key(marca_id) references marca(id)
 )engine = InnoDB;
