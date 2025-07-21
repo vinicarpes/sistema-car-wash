@@ -1,5 +1,6 @@
 package br.edu.ifsc.fln.model.dao;
 
+import br.edu.ifsc.fln.model.database.DatabaseMySQL;
 import br.edu.ifsc.fln.model.domain.Cor;
 
 import java.sql.Connection;

@@ -108,6 +108,9 @@ public class VeiculoDAO {
 
     public Veiculo buscar(int id) {
         String sql = "SELECT * FROM veiculo WHERE id=?";
+        modeloDAO.setConnection(connection);
+        corDAO.setConnection(connection);
+        clienteDAO.setConnection(connection);
         Veiculo retorno = new Veiculo();
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -119,7 +122,7 @@ public class VeiculoDAO {
                 retorno.setPlaca(resultado.getString("placa"));
                 retorno.setModelo(modeloDAO.buscar(resultado.getInt("modelo_id")));
                 retorno.setCor(corDAO.buscar(resultado.getInt("cor_id")));
-//                retorno.setCliente(buscarCliente(resultado.getInt("cliente_id")));
+                retorno.setCliente(clienteDAO.buscar(resultado.getInt("cliente_id")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
