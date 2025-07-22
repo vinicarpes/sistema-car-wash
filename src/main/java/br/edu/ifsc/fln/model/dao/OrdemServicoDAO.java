@@ -17,6 +17,7 @@ public class OrdemServicoDAO {
 
     private Connection connection;
     private VeiculoDAO veiculoDAO;
+    private ClienteDAO clienteDAO = new ClienteDAO();
     private ItemDeOrdemServicoDAO itensDAO = new ItemDeOrdemServicoDAO();
 
     // Getters e Setters
@@ -30,6 +31,7 @@ public class OrdemServicoDAO {
 
     public boolean inserir(OrdemServico os) {
         itensDAO.setConnection(connection);
+        clienteDAO.setConnection(connection);
         String sql = "INSERT INTO ordem_servico(total, desconto, agenda, veiculo_id) VALUES(?, ?, ?, ?)";
 
         try {
@@ -47,6 +49,8 @@ public class OrdemServicoDAO {
                 long numeroGerado = generatedKeys.getLong(1);
                 os.setNumero(numeroGerado); // atualiza o objeto com o número gerado
                 itensDAO.inserir(os.getItens(), numeroGerado);
+                os.calcularPontuacao();
+                clienteDAO.updatePontuacao(os.getVeiculo().getCliente());
             } else {
                 throw new SQLException("Falha ao obter o número da ordem de serviço inserida.");
             }
@@ -68,7 +72,6 @@ public class OrdemServicoDAO {
             stmt.setInt(4, os.getVeiculo().getId());
             stmt.setLong(5, os.getNumero());
             stmt.executeUpdate();
-
             // Atualizar itens: remover os antigos e inserir os novos
             itensDAO.setConnection(connection);
             itensDAO.removerPorOrdemServico(os.getNumero());
@@ -97,7 +100,6 @@ public class OrdemServicoDAO {
     public List<OrdemServico> listar() {
         String sql = "SELECT * FROM ordem_servico";
         List<OrdemServico> retorno = new ArrayList<>();
-        System.out.println("DAO.listar() → connection = " + connection);
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             ResultSet resultado = stmt.executeQuery();

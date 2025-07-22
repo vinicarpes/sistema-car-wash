@@ -59,6 +59,23 @@ public class ClienteDAO {
         return false;
     }
 
+    public boolean updatePontuacao(Cliente cliente) {
+        String sqlCliente = "UPDATE cliente SET pontuacao=? WHERE id=?";
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sqlCliente);
+            stmt.setInt(1, cliente.getPontuacao().saldo());
+            stmt.setInt(2, cliente.getId());
+            stmt.executeUpdate();
+            stmt.close();
+
+            return true;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
 
 
     public boolean alterar(Cliente cliente) {
@@ -102,7 +119,7 @@ public class ClienteDAO {
 
     public List<Cliente> listar() {
     String sql = """
-        SELECT c.id, c.nome, c.celular, c.email, c.data_cadastro,
+        SELECT c.id, c.nome, c.celular, c.email, c.data_cadastro, c.pontuacao,
                pf.cpf, pf.data_nascimento,
                pj.cnpj, pj.inscricao_estadual
         FROM cliente c
@@ -129,6 +146,7 @@ public class ClienteDAO {
                 pf.setDataCadastro(rs.getDate("data_cadastro").toLocalDate());
                 pf.setCpf(rs.getString("cpf"));
                 pf.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
+                pf.getPontuacao().adicionar(rs.getInt("pontuacao"));
                 cliente = pf;
             } else {
                 PessoaJuridica pj = new PessoaJuridica();
@@ -139,6 +157,7 @@ public class ClienteDAO {
                 pj.setDataCadastro(rs.getDate("data_cadastro").toLocalDate());
                 pj.setCnpj(rs.getString("cnpj"));
                 pj.setInscricaoEstadual(rs.getString("inscricao_estadual"));
+                pj.getPontuacao().adicionar(rs.getInt("pontuacao"));
                 cliente = pj;
             }
 

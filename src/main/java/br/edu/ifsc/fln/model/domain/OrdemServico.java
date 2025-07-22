@@ -26,6 +26,13 @@ public class OrdemServico {
         this.setTotal(total);
     }
 
+    public int calcularPontuacao(){
+        int pontuacao = 0;
+        pontuacao+= itens.size()*10;
+        veiculo.getCliente().getPontuacao().adicionar(pontuacao);
+        return pontuacao;
+    }
+
     public Veiculo getVeiculo() {
         return veiculo;
     }

@@ -99,9 +99,8 @@ public class FXMLAnchorPaneProcessoOrdemServicoController implements Initializab
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("Connection: " + connection);
-        veiculoDAO.setConnection(connection);               // ✅
-        ordemServicoDAO.setConnection(connection);          // ✅
+        veiculoDAO.setConnection(connection);
+        ordemServicoDAO.setConnection(connection);          
         ordemServicoDAO.setVeiculoDAO(veiculoDAO);
 
         carregarTableView();

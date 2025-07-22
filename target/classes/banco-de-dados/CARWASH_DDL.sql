@@ -44,6 +44,7 @@ create table cliente (
     celular varchar(15) not null,
     email varchar(150) not null,
     data_cadastro date not null,
+    pontuacao int default 0,
     primary key (id)
 )engine = InnoDB;
 
