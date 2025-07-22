@@ -35,7 +35,7 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Relatórios">
               <items>
-                <MenuItem fx:id="menuItemRelatorioEstoque" mnemonicParsing="false" text="Estoque" />
+                <MenuItem fx:id="menuItemRelatorioOrdemServico" mnemonicParsing="false" onAction="#handleMenuItemRelatorio" text="Ordens de Serviço" />
               </items>
             </Menu>
         </menus>
