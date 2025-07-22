@@ -20,8 +20,8 @@ public class OrdemServico {
                 if (valor != null) {
                     total += valor;
                 }
-                total = total - (total*(desconto/100));
             }
+                total = total - (total*(desconto/100));
         }
         this.setTotal(total);
     }
