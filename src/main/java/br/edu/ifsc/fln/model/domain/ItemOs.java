@@ -1,6 +1,7 @@
 package br.edu.ifsc.fln.model.domain;
 
 public class ItemOs {
+    private int id;
     private Double valorServico;
     private String observacoes;
     private Servico servico;
@@ -27,5 +28,9 @@ public class ItemOs {
 
     public void setObservacoes(String observacoes) {
         this.observacoes = observacoes;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

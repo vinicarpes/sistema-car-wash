@@ -12,6 +12,20 @@ public class OrdemServico {
     private List<ItemOs> itens = new ArrayList();
     private Veiculo veiculo;
 
+    public void calcularTotal() {
+        double total = 0.0;
+        if (itens != null) {
+            for (ItemOs itemOs : itens) {
+                Double valor = itemOs.getValorServico();
+                if (valor != null) {
+                    total += valor;
+                }
+                total = total - (total*(desconto/100));
+            }
+        }
+        this.setTotal(total);
+    }
+
     public Veiculo getVeiculo() {
         return veiculo;
     }

@@ -3,6 +3,7 @@ package br.edu.ifsc.fln.controller;
 import br.edu.ifsc.fln.model.dao.ItemDeOrdemServicoDAO;
 import br.edu.ifsc.fln.model.dao.OrdemServicoDAO;
 import br.edu.ifsc.fln.model.dao.ServicoDAO;
+import br.edu.ifsc.fln.model.dao.VeiculoDAO;
 import br.edu.ifsc.fln.model.database.Database;
 import br.edu.ifsc.fln.model.database.DatabaseFactory;
 import br.edu.ifsc.fln.model.domain.ItemOs;
@@ -87,17 +88,21 @@ public class FXMLAnchorPaneProcessoOrdemServicoController implements Initializab
 
     //acesso ao banco de dados
     private final Database database = DatabaseFactory.getDatabase("mysql");
-    private final Connection connection = database.conectar();
+    private Connection connection = database.conectar();
     private final OrdemServicoDAO ordemServicoDAO = new OrdemServicoDAO();
     private final ItemDeOrdemServicoDAO itemDeOrdemServicoDAO = new ItemDeOrdemServicoDAO();
     private final ServicoDAO servicoDAO = new ServicoDAO();
+    private VeiculoDAO veiculoDAO = new VeiculoDAO();
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        ordemServicoDAO.setConnection(connection);
+        System.out.println("Connection: " + connection);
+        veiculoDAO.setConnection(connection);               // ✅
+        ordemServicoDAO.setConnection(connection);          // ✅
+        ordemServicoDAO.setVeiculoDAO(veiculoDAO);
 
         carregarTableView();
 
@@ -110,8 +115,8 @@ public class FXMLAnchorPaneProcessoOrdemServicoController implements Initializab
 
         tableColumnOrdemServicoId.setCellValueFactory(new PropertyValueFactory<>("numero"));
         tableColumnOrdemServicoData.setCellValueFactory(new PropertyValueFactory<>("agenda"));
-        tableColumnOrdemServicoData.setCellFactory(column -> {
         tableColumnOrdemServicoVeiculo.setCellValueFactory(new PropertyValueFactory<>("veiculo"));
+        tableColumnOrdemServicoData.setCellFactory(column -> {
             return new TableCell<OrdemServico, LocalDate>() {
                 @Override
                 protected void updateItem(LocalDate item, boolean empty) {
@@ -156,43 +161,12 @@ public class FXMLAnchorPaneProcessoOrdemServicoController implements Initializab
     @FXML
     private void handleButtonInserir(ActionEvent event) throws IOException, SQLException {
         OrdemServico venda = new OrdemServico();
-        List<ItemOs> itensDeOrdemServico = new ArrayList<>();
+//        List<ItemOs> itensDeOrdemServico = new ArrayList<>();
 //        venda.setItensOs(itensDeOrdemServico);
         boolean buttonConfirmarClicked = showFXMLAnchorPaneProcessoOrdemServicoDialog(venda);
         if (buttonConfirmarClicked) {
-            //O código comentado a seguir (bloco try..catch) evidencia uma má prática de programação, haja vista que o boa parte da lógica de negócio está implementada no controller
-            //PROBLEMA: caso haja necessidade de levar esta aplicação para outro nível (uma aplicação web, por exemplo), todo esse código deverá ser repetido no controller, o que
-            //de fato pode se tornar inconsistente caso uma nova lógica seja necessária, implicando na necessidade de rever todos os controllers das aplicações, mas, o que garante
-            // que todas equipes farão isso?
-            //SOLUÇÃO: levar a lógica de negócio para o OrdemServicoDAO, afinal, estamos tratando de uma venda. É ela que deve resolver o problema
-//            try {
-//                connection.setAutoCommit(false);
-//                ordemServicoDAO.setConnection(connection);
-//                ordemServicoDAO.inserir(venda);
-//                itemDeOrdemServicoDAO.setConnection(connection);
-//                servicoDAO.setConnection(connection);
-//                estoqueDAO.setConnection(connection);
-//                for (ItemOs itemDeOrdemServico: venda.getItensOs()) {
-//                    Produto produto = itemDeOrdemServico.getProduto();
-//                    itemDeOrdemServico.setOrdemServico(ordemServicoDAO.buscarUltimaOrdemServico());
-//                    itemDeOrdemServicoDAO.inserir(itemDeOrdemServico);
-//                    produto.getEstoque().setQuantidade(
-//                            produto.getEstoque().getQuantidade() - itemDeOrdemServico.getQuantidade());
-//                    estoqueDAO.atualizar(produto.getEstoque());
-//                }
-//                connection.commit();
-//                carregarTableView();
-//            } catch (SQLException exc) {
-//                try {
-//                    connection.rollback();
-//                } catch (SQLException exc1) {
-//                    Logger.getLogger(FXMLAnchorPaneProcessoOrdemServicoController.class.getName()).log(Level.SEVERE, null, exc1);
-//                }
-//                Logger.getLogger(FXMLAnchorPaneProcessoOrdemServicoController.class.getName()).log(Level.SEVERE, null, exc);
-//            }
-//        }
             ordemServicoDAO.setConnection(connection);
-//            ordemServicoDAO.inserir(venda);
+            ordemServicoDAO.inserir(venda);
             carregarTableView();
         }
     }
@@ -200,15 +174,22 @@ public class FXMLAnchorPaneProcessoOrdemServicoController implements Initializab
     @FXML
     private void handleButtonAlterar(ActionEvent event) throws IOException {
         OrdemServico venda = tableView.getSelectionModel().getSelectedItem();
+
         if (venda != null) {
+            itemDeOrdemServicoDAO.setConnection(connection);
+            venda.setItens(itemDeOrdemServicoDAO.buscar(venda.getNumero()));
+
             boolean buttonConfirmarClicked = showFXMLAnchorPaneProcessoOrdemServicoDialog(venda);
+
             if (buttonConfirmarClicked) {
-//                ordemServicoDAO.alterar(venda);
+                ordemServicoDAO.alterar(venda);
                 carregarTableView();
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Por favor, escolha um venda na Tabela.");
+            alert.setTitle("Erro");
+            alert.setHeaderText("Nenhuma seleção");
+            alert.setContentText("Por favor, selecione uma ordem de serviço na tabela.");
             alert.show();
         }
     }
@@ -217,9 +198,9 @@ public class FXMLAnchorPaneProcessoOrdemServicoController implements Initializab
     private void handleButtonRemover(ActionEvent event) throws SQLException {
         OrdemServico venda = tableView.getSelectionModel().getSelectedItem();
         if (venda != null) {
-            if (AlertDialog.confirmarExclusao("Tem certeza que deseja excluir a venda " + venda.getNumero())) {
+            if (AlertDialog.confirmarExclusao("Tem certeza que deseja excluir a OS? " + venda.getNumero())) {
                 ordemServicoDAO.setConnection(connection);
-//                ordemServicoDAO.remover(venda);
+                ordemServicoDAO.remover(venda);
                 carregarTableView();
             }
         } else {
@@ -243,13 +224,12 @@ public class FXMLAnchorPaneProcessoOrdemServicoController implements Initializab
 
         //Setando o venda ao controller
         FXMLAnchorPaneProcessoOrdemServicoDialogController controller = loader.getController();
-//        controller.setDialogStage(dialogStage);
-//        controller.setOrdemServico(venda);
+        controller.setDialogStage(dialogStage);
+        controller.setOrdemServico(venda);
 
         //Mostra o diálogo e espera até que o usuário o feche
         dialogStage.showAndWait();
 
-//        return controller.isButtonConfirmarClicked();
-        return true;
+        return controller.isButtonConfirmarClicked();
     }
 }
