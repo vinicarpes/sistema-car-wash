@@ -7,7 +7,9 @@ import br.edu.ifsc.fln.model.domain.Veiculo;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -143,4 +145,37 @@ public class OrdemServicoDAO {
         }
         return retorno;
     }
+
+    public Map<Integer, ArrayList<Object>> listarFaturamentoPorMes() {
+        Map<Integer, ArrayList<Object>> resultado = new LinkedHashMap<>();
+        String sql = """
+        SELECT YEAR(agenda) AS ano, MONTH(agenda) AS mes, SUM(total) AS faturamento
+        FROM ordem_servico
+        GROUP BY ano, mes
+        ORDER BY ano, mes
+    """;
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int ano = rs.getInt("ano");
+                int mes = rs.getInt("mes");
+                double faturamento = rs.getDouble("faturamento");
+
+                if (!resultado.containsKey(ano)) {
+                    resultado.put(ano, new ArrayList<>());
+                }
+
+                resultado.get(ano).add(mes);         // índice par
+                resultado.get(ano).add(faturamento); // índice ímpar
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultado;
+    }
+
 }
