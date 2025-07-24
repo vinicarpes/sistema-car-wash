@@ -1,5 +1,6 @@
 package br.edu.ifsc.fln.model.dao;
 
+import br.edu.ifsc.fln.exception.DAOException;
 import br.edu.ifsc.fln.model.domain.*;
 import br.edu.ifsc.fln.model.enums.ECategoria;
 import br.edu.ifsc.fln.model.enums.ETipoCombustivel;
@@ -97,6 +98,8 @@ public class VeiculoDAO {
             }
         } catch (SQLException ex) {
             Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DAOException e) {
+            throw new RuntimeException(e);
         }
         return retorno;
     }
@@ -124,8 +127,10 @@ public class VeiculoDAO {
                 retorno.setCor(corDAO.buscar(resultado.getInt("cor_id")));
                 retorno.setCliente(clienteDAO.buscar(resultado.getInt("cliente_id")));
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DAOException e) {
+            throw new RuntimeException(e.getMessage(), e.getCause());
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage(), e.getCause());
         }
         return retorno;
     }

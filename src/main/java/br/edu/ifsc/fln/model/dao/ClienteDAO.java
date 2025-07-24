@@ -4,6 +4,7 @@
  */
 package br.edu.ifsc.fln.model.dao;
 
+import br.edu.ifsc.fln.exception.DAOException;
 import br.edu.ifsc.fln.model.domain.Cliente;
 import br.edu.ifsc.fln.model.domain.PessoaFisica;
 import br.edu.ifsc.fln.model.domain.PessoaJuridica;
@@ -174,7 +175,7 @@ public class ClienteDAO {
 }
 
 
-    public Cliente buscar(int clienteId) {
+    public Cliente buscar(int clienteId) throws DAOException {
         String sql = """
         SELECT c.id, c.nome, c.celular, c.email, c.data_cadastro,
                pf.cpf, pf.data_nascimento,
