@@ -50,4 +50,9 @@ public class Servico {
     public static void setPontos(int pontos) {
         Servico.pontos = pontos;
     }
+
+    @Override
+    public String toString(){
+        return descricao;
+    }
 }

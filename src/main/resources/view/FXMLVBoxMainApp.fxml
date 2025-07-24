@@ -25,17 +25,17 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Processos">
             <items>
-              <MenuItem fx:id="menuItemCadastroOrdemServico" mnemonicParsing="false" text="Ordem de Serviço" />
+              <MenuItem fx:id="menuItemCadastroOrdemServico" mnemonicParsing="false" onAction="#handleMenuItemProcessoOrdemServico" text="Ordem de Serviço" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Gráficos">
             <items>
-              <MenuItem fx:id="menuItemGraficoVendasPorMes" mnemonicParsing="false" onAction="#handleMenuItemGraficosVendasPorMes" text="Vendas por  Mês" />
+              <MenuItem fx:id="menuItemGraficoVendasPorMes" mnemonicParsing="false" onAction="#handleMenuItemGraficosFaturamentoPorMes" text="Faturamento por Mês" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Relatórios">
               <items>
-                <MenuItem fx:id="menuItemRelatorioEstoque" mnemonicParsing="false" text="Estoque" />
+                <MenuItem fx:id="menuItemRelatorioOrdemServico" mnemonicParsing="false" onAction="#handleMenuItemRelatorio" text="Ordens de Serviço" />
               </items>
             </Menu>
         </menus>

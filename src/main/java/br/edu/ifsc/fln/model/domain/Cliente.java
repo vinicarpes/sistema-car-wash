@@ -60,6 +60,14 @@ public abstract class Cliente {
         this.id = id;
     }
 
+    public Pontuacao getPontuacao() {
+        return pontuacao;
+    }
+
+    public void setPontuacao(Pontuacao pontuacao) {
+        this.pontuacao = pontuacao;
+    }
+
     public abstract boolean atualizarComplemento(Connection connection) throws SQLException;
 
 

@@ -50,6 +50,8 @@ public class FXMLAnchorPaneCadastroClienteController implements Initializable {
     private Label lbClienteId;
 
     @FXML
+    private Label lbClientePontuacao;
+    @FXML
     private Label lbClienteDoc;
 
     @FXML
@@ -122,6 +124,7 @@ public class FXMLAnchorPaneCadastroClienteController implements Initializable {
             lbClienteEmail.setText(cliente.getEmail());
             lbClienteTelefone.setText(cliente.getCelular());
             lbClienteDtCadastro.setText(cliente.getDataCadastro().toString());
+            lbClientePontuacao.setText(String.valueOf(cliente.getPontuacao().saldo()));
             if (cliente instanceof PessoaFisica) {
                 lbClienteNascimento.setVisible(true);
                 lbClienteDtNascimento.setVisible(true);

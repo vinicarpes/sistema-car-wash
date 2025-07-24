@@ -1,5 +1,6 @@
 package br.edu.ifsc.fln.model.dao;
 
+import br.edu.ifsc.fln.exception.DAOException;
 import br.edu.ifsc.fln.model.domain.*;
 import br.edu.ifsc.fln.model.enums.ECategoria;
 import br.edu.ifsc.fln.model.enums.ETipoCombustivel;
@@ -97,6 +98,8 @@ public class VeiculoDAO {
             }
         } catch (SQLException ex) {
             Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DAOException e) {
+            throw new RuntimeException(e);
         }
         return retorno;
     }
@@ -108,6 +111,9 @@ public class VeiculoDAO {
 
     public Veiculo buscar(int id) {
         String sql = "SELECT * FROM veiculo WHERE id=?";
+        modeloDAO.setConnection(connection);
+        corDAO.setConnection(connection);
+        clienteDAO.setConnection(connection);
         Veiculo retorno = new Veiculo();
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -119,10 +125,12 @@ public class VeiculoDAO {
                 retorno.setPlaca(resultado.getString("placa"));
                 retorno.setModelo(modeloDAO.buscar(resultado.getInt("modelo_id")));
                 retorno.setCor(corDAO.buscar(resultado.getInt("cor_id")));
-//                retorno.setCliente(buscarCliente(resultado.getInt("cliente_id")));
+                retorno.setCliente(clienteDAO.buscar(resultado.getInt("cliente_id")));
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DAOException e) {
+            throw new RuntimeException(e.getMessage(), e.getCause());
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage(), e.getCause());
         }
         return retorno;
     }

@@ -55,4 +55,9 @@ public class Veiculo {
     public void setModelo(Modelo modelo) {
         this.modelo = modelo;
     }
+
+    @Override
+    public String toString (){
+        return placa;
+    }
 }

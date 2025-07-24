@@ -44,6 +44,7 @@ create table cliente (
     celular varchar(15) not null,
     email varchar(150) not null,
     data_cadastro date not null,
+    pontuacao int default 0,
     primary key (id)
 )engine = InnoDB;
 
@@ -79,3 +80,24 @@ create table veiculo(
     constraint fk_cliente_veiculo foreign key (cliente_id) references cliente(id),
     constraint fk_cor foreign key(cor_id) references cor(id)
 )engine=innodb;
+
+create table ordem_servico (
+                               numero bigint not null auto_increment,
+                               total decimal(10, 2) not null,
+                               desconto decimal(10,2) default 0,
+                               veiculo_id int not null,
+                               agenda date not null,
+                               primary key(numero),
+                               foreign key (veiculo_id) references veiculo(id)
+)engine = innodb;
+
+create table itens_os (
+                          id int not null auto_increment,
+                          valor_servico decimal(10, 2) not null,
+                          servico_id int not null,
+                          os_numero bigint not null,
+                          observacoes varchar(255),
+                          primary key(id),
+                          foreign key (servico_id) references servico(id),
+                          foreign key (os_numero) references ordem_servico(numero)
+)engine = innodb;

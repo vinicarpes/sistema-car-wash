@@ -84,18 +84,21 @@ public class FXMLVBoxMainAppController implements Initializable {
     }
 
     @FXML
-    public void handleMenuItemProcessoVenda() throws IOException {
-        //TODO not implemented yet
+    public void handleMenuItemProcessoOrdemServico() throws IOException {
+        AnchorPane a = (AnchorPane) FXMLLoader.load(getClass().getResource("/view/FXMLAnchorPaneProcessoOrdemServico.fxml"));
+        anchorPane.getChildren().setAll(a);
     }     
     
     @FXML
-    public void handleMenuItemGraficosVendasPorMes() throws IOException {
-        //TODO not implemented yet
+    public void handleMenuItemGraficosFaturamentoPorMes() throws IOException {
+        AnchorPane a = (AnchorPane) FXMLLoader.load(getClass().getResource("/view/FXMLAnchorPaneGraficoFaturamentoMes.fxml"));
+        anchorPane.getChildren().setAll(a);
     } 
     
     @FXML
-    public void handleMenuItemRelatorioEstoqueProdutos() throws IOException {
-        //TODO not implemented yet
+    public void handleMenuItemRelatorio() throws IOException {
+        AnchorPane a = (AnchorPane) FXMLLoader.load(getClass().getResource("/view/FXMLAnchorPaneRelatorioOrdemServico.fxml"));
+        anchorPane.getChildren().setAll(a);
     } 
     
 }
